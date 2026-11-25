@@ -10,7 +10,7 @@ function FeaturedProject({ project, onViewCaseStudy }) {
             <p className="font-technical project-number">Project / {project.number}</p>
             <p className="font-technical featured-project-label">{project.status}</p>
           </div>
-          <span className="font-technical featured-project-version">Version {project.version}</span>
+          {project.version ? <span className="font-technical featured-project-version">Version {project.version}</span> : null}
         </div>
         <h3>{project.title}</h3>
         <p className="featured-project-description">{project.shortDescription}</p>

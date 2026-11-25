@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { projects } from '../data/projects'
 import ProjectGallery from './ProjectGallery'
 import ProjectNavigation from './ProjectNavigation'
@@ -67,9 +67,9 @@ function CaseStudySection({ index, label, title, children, className = '' }) {
 function MetadataStrip({ project }) {
   const metadata = [
     { label: 'Role', value: project.role },
-    { label: 'System type', value: 'Capstone / Thesis' },
-    { label: 'Core stack', value: 'PHP / MySQL / JavaScript' },
-    { label: 'Architecture', value: 'Web-Based Management System' },
+    { label: 'Category', value: 'Capstone / Thesis' },
+    { label: 'Status', value: project.status },
+    { label: 'Institution', value: 'EARIST Cavite Campus' },
   ]
 
   return (
@@ -114,7 +114,7 @@ function BduCaseStudy({ project, onClose, onNavigate, isClosing }) {
           <button className="bdu-return-link" type="button" onClick={onClose}>
             <span aria-hidden="true">&larr;</span> Return to projects
           </button>
-          <button ref={closeButtonRef} aria-label="Close EARIST BDU case study" className="bdu-close-button" type="button" onClick={onClose}>
+          <button ref={closeButtonRef} aria-label="Close BDU CONNECT case study" className="bdu-close-button" type="button" onClick={onClose}>
             Close <span aria-hidden="true">X</span>
           </button>
         </div>
@@ -123,13 +123,14 @@ function BduCaseStudy({ project, onClose, onNavigate, isClosing }) {
           <div className="bdu-case-study-heading">
             <div className="bdu-case-study-kicker">
               <p className="font-technical">Project / {project.number}</p>
-              <p className="font-technical">Featured / Capstone</p>
+              <p className="font-technical">Featured / {project.status}</p>
             </div>
             <h1 id="bdu-case-study-title">{project.title}</h1>
-            <p className="bdu-case-study-type">Version {project.version} / {project.type}</p>
+            <p className="bdu-case-study-type">{project.subtitle}</p>
+            <p className="bdu-case-study-type">{project.type}</p>
             <p className="bdu-case-study-description">{project.overview}</p>
           </div>
-          <ProjectScreenshot className="bdu-header-screenshot project-case-study-hero-screenshot" featured placeholderLabel="System preview / BDU" project={project} screenshot={project.screenshots[0]} />
+          <ProjectScreenshot className="bdu-header-screenshot project-case-study-hero-screenshot" featured placeholderLabel="System preview / BDU CONNECT" project={project} screenshot={project.screenshots[0]} />
         </header>
 
         <MetadataStrip project={project} />
@@ -159,7 +160,7 @@ function BduCaseStudy({ project, onClose, onNavigate, isClosing }) {
             </div>
             <div className="bdu-access-note">
               <p className="font-technical">Account &amp; access workflow</p>
-              <p>Student and Staff registrations enter a pending state and move through a waiting area until administrative review. Admin accounts are not created through public registration.</p>
+              <p>Student and Staff accounts undergo registration, email verification, and administrative approval before accessing their authorized system interfaces. Administrator accounts are not created through public registration.</p>
             </div>
           </CaseStudySection>
 
@@ -194,22 +195,29 @@ function BduCaseStudy({ project, onClose, onNavigate, isClosing }) {
                 </article>
               ))}
             </div>
-            <p className="bdu-context-note">The system uses PHP and MySQL as its primary server-side and database foundation, with JavaScript and AJAX supporting interactive browser-side workflows and Chart.js supporting data visualization where applicable.</p>
+            <p className="bdu-context-note">BDU CONNECT uses React and Tailwind CSS to deliver responsive, role-specific user interfaces, with Vite supporting the frontend development and build process. Supabase provides PostgreSQL database services, authentication, file storage, and database-level access controls. PostgreSQL functions and RPC operations support application workflows and data processing.</p>
           </CaseStudySection>
 
           <CaseStudySection index="06" label="Database & data management" title="Data domains">
             <div className="bdu-data-layout">
               <div className="bdu-case-prose">
-                <p>The system is organized around functional data domains that connect users, products, inventory, transactions, and operational records. This view describes the areas of information the system works with, not a literal database schema.</p>
-                <div className="bdu-domain-list" aria-label="BDU data domains">
+                <p>The system uses PostgreSQL through Supabase to manage interconnected operational data, including user accounts, product information, inventory, pre-orders, transactions, notifications, and administrative records. Database relationships, access policies, and database functions support organized data management and controlled access.</p>
+                <div className="bdu-domain-list" aria-label="BDU CONNECT data domains">
                   {caseStudy.dataDomains.map((domain) => <span key={domain}>{domain}</span>)}
                 </div>
               </div>
-              <div className="bdu-data-diagram" aria-label="Conceptual relationships between BDU data domains">
+              <div className="bdu-data-diagram" aria-label="Conceptual relationships between BDU CONNECT data domains">
                 <p className="font-technical">Conceptual view / not an exact ERD</p>
-                <div className="bdu-data-diagram-row"><span>Users</span><span aria-hidden="true">-&gt;</span><span>Orders</span><span aria-hidden="true">-&gt;</span><span>Pickup</span></div>
-                <div className="bdu-data-diagram-row"><span>Products</span><span aria-hidden="true">-&gt;</span><span>Inventory</span><span aria-hidden="true">-&gt;</span><span>Transactions</span></div>
-                <div className="bdu-data-diagram-row"><span>Activity Records</span><span aria-hidden="true">-&gt;</span><span>Reports</span></div>
+                {caseStudy.dataRelationships.map((relationship) => (
+                  <div key={relationship.join('-')} className="bdu-data-diagram-row">
+                    {relationship.map((domain, index) => (
+                      <Fragment key={domain}>
+                        {index > 0 ? <span aria-hidden="true">-&gt;</span> : null}
+                        <span>{domain}</span>
+                      </Fragment>
+                    ))}
+                  </div>
+                ))}
               </div>
             </div>
           </CaseStudySection>
